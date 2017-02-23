@@ -1,0 +1,13 @@
+{% extends "layout.%s.html"|format(config.TEMPLATE) %}
+{% block title %}Copyright Notice{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <h4>{{_('login required')}}</h4>
+            <p>{{_('you must login')}}</p>
+            <p><a href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='EVE_SSO_Login_Buttons_Small_Black.png') }}" alt="EVE : LOG IN with EVE Online" /></a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

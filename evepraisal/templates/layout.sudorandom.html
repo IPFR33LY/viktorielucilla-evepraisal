@@ -1,0 +1,33 @@
+{% extends "layout.default.html" %}
+{% macro adspace() -%}
+{% if google_ads['enabled'] %}
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Leaderboard -->
+<ins class="adsbygoogle"
+     style="{{ google_ads['style'] }}"
+     data-ad-client="{{ google_ads['client'] }}"
+     data-ad-slot="{{ google_ads['slot'] }}"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+{% endif %}
+{%- endmacro %}
+{% block extra_javascript %}
+{{ super() }}
+{% if google_analytics['enabled'] %}
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '{{ google_analytics['account'] }}']);
+  _gaq.push(['_setDomainName', '{{ google_analytics['domain'] }}']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+{% endif %}
+{% endblock %}

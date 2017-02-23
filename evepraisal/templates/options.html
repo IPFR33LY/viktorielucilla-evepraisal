@@ -1,0 +1,23 @@
+{% extends "layout.%s.html"|format(config.TEMPLATE) %}
+{% block title %}{% endblock %}
+{% block extra_style %}
+{% endblock %}
+{% block body %}
+<div class="container">
+  <form action="" method="post">
+    <h2 class="form-signin-heading">Options</h2>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
+    <label class="checkbox"><input name="autosubmit" type="checkbox"{% if session['options']['autosubmit'] %} checked{% endif %}> {{_('autosubmit on paste')}}</label>
+    <label class="checkbox"><input name="share" type="checkbox"{% if session['options']['share'] %} checked{% endif %}> {{_('save for sharing')}}</label>
+    <label class="checkbox"><input name="enablekey" type="checkbox" />{% if secretkey is none %}{{_('enable external key')}}{% else %}{{_('refresh external key')}}{% endif %} </label>
+    {% if secretkey is not none %}<label class="checkbox"><input name="disablekey" type="checkbox" />{{_('disable external key')}}</label>{% endif %}
+
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+    <div>
+        {{_('character id')}}: {{ characterid }}<br />
+        {{_('secret key')}}: '{% if secretkey is not none %}{{ secretkey }}{% else %}&lt; {{_('disabled')}} &gt;{% endif %}'<br />
+        {% if secretkey is not none %}Authorization: Basic {{ combinedkey }}{% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+body {
+    padding-top: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.table-condensed th, .table-condensed td {
+    padding: 0px 4px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+p.footer {
+    text-align: center;
+}
+
+div.raw_textarea {
+    padding: 0 20px;
+}
+
+span.warning-message {
+    color: #B94A48;
+}
+
+    span.warning-message a {
+        color: #B94A48;
+        font-weight: bold;
+    }
+
+table th {
+    cursor: pointer;
+}
+
+#loginlink {
+    padding: 10px;
+}
+
+.rightalign {
+    text-align: right;
+}
+
+.centeralign {
+	text-align: center;
+}
+
+.leftfloat {
+    float: left;
+}
+
+th.itemheader {
+	width: 60%;
+}
+
+#result_form {
+    margin-bottom:10px;
+}

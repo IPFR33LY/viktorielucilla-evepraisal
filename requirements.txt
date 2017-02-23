@@ -1,0 +1,10 @@
+alembic
+pylibmc; sys_platform != 'win32'
+sqlalchemy
+flask
+Flask-Cache
+Flask-Babel
+flask_oauthlib
+flask-sqlalchemy
+evepaste>=0.9
+git+git://github.com/ntt/reverence.git

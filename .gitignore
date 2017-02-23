@@ -1,0 +1,7 @@
+.DS_Store
+*.pyc
+build
+dist
+*.swp
+data/scans.db
+data/current_scan_id.dat

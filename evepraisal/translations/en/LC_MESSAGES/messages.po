@@ -1,0 +1,172 @@
+# English translations for PROJECT.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-08-03 23:58-0500\n"
+"PO-Revision-Date: 2013-01-03 20:18-0600\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: evepraisal/templates/index.html:66
+msgid "paste box title"
+msgstr "Quick Estimate"
+
+#: evepraisal/templates/index.html:68
+msgid "paste box placeholder"
+msgstr "paste stuff to evaluate here. protip: ctrl+a, ctrl+c, ctrl+v"
+
+#: evepraisal/templates/index.html:72
+msgid "submit button"
+msgstr "Submit"
+
+#: evepraisal/templates/index.html:20
+msgid "buyback button"
+msgstr "Calculate Buyback"
+
+#: evepraisal/templates/index.html:73
+msgid "reset button"
+msgstr "Reset"
+
+#: evepraisal/templates/index.html:91
+msgid "what do i do title"
+msgstr "What do I do?"
+
+#: evepraisal/templates/index.html:93
+msgid "what do i do"
+msgstr ""
+"Find something in Eve Online that you want to price check like a "
+"contract, cargo scan result, etc. Press <strong>CTRL + A, CTRL + "
+"C</strong>, then click on the lovely box to the left or above this and "
+"press <strong>CTRL + V</strong>. Submit and you should see a price "
+"breakdown of all the items."
+
+#: evepraisal/templates/index.html:96
+msgid "paste options title"
+msgstr "What all can I paste in there?"
+
+#: evepraisal/templates/index.html:98
+msgid "paste options"
+msgstr ""
+"<p>At first, this started as a simple cargo scan estimator but over time "
+"more formats have been added to the parser so you can use it as a more "
+"general price checker. Currently the following formats are supported:</p>\n"
+"<ul>\n"
+"  <li>Inventory</li>\n"
+"  <li>Cargo Scanner</li>\n"
+"  <li>D-Scan</li>\n"
+"  <li>Bill of Materials</li>\n"
+"  <li>Loot History</li>\n"
+"  <li>Planetary Interaction</li>\n"
+"  <li>Survey Scanner</li>\n"
+"  <li>View Contents</li>\n"
+"  <li>Contracts</li>\n"
+"  <li>EFT Blocks</li>\n"
+"  <li>In-game Killmail</li>\n"
+"  <li>Wallet Transactions</li>\n"
+"  <li>Asset listings (named ships don't work)</li>\n"
+"  <li>Manual Entry. Example: \"94812 Tritanium\"</li>\n"
+"</ul>\n"
+
+#: evepraisal/templates/layout.default.html:5
+#: evepraisal/templates/layout.default.html:62
+msgid "app title"
+msgstr "Evepraisal"
+
+#: evepraisal/templates/layout.default.html:5
+#: evepraisal/templates/layout.default.html:9
+msgid "app short description"
+msgstr ""
+"Price check Eve Online items from Cargo Scans, Contracts, D-Scan, EFT, Inventory, Asset listing, Loot History, PI, Survey Scanner, Killmails, Wallet Transactions"
+"Blocks, Inventory, Assets"
+
+#: evepraisal/templates/layout.default.html:64
+msgid "history button"
+msgstr "History"
+
+#: evepraisal/templates/layout.default.html:67
+msgid "options button"
+msgstr "Options"
+
+#: evepraisal/templates/layout.default.html:68
+msgid "logout button"
+msgstr "Logout"
+
+#: evepraisal/templates/layout.default.html:74
+#: evepraisal/templates/layout.default.html:83
+msgid "help tile"
+msgstr "Help"
+
+#: evepraisal/templates/layout.default.html:89
+#: evepraisal/templates/results.html:47
+#: evepraisal/templates/scan_results.html:39
+msgid "close buton"
+msgstr "Close"
+
+#: evepraisal/templates/layout.default.html:99
+msgid "error"
+msgstr "Error"
+
+#: evepraisal/templates/layout.default.html:114
+msgid "footer text"
+msgstr ""
+"Created by <a href=\"https://gate.eveonline.com/Profile/Magerawr\" "
+"target=\"_blank\">Magerawr</a>. Feel free to send me questions, "
+"suggestions or donations of ISK. <br /> All "
+"<a href=\"http://www.evepraisal.com/legal\">Eve Related Materials</a> are"
+" property of CCP Games. See "
+"<a href=\"http://www.evepraisal.com/legal\">Legal Notice</a>. <br />"
+"<a href=\"https://github.com/sudorandom/evepraisal\" target=\"_blank\">Source on github</a> | "
+"<a href=\"https://github.com/sudorandom/evepraisal/issues\" target=\"_blank\">Report an Issue</a> | "
+"<a href=\"http://sudorandom.com\" target=\"_blank\">Creator's Thoughts</a>"
+
+#: evepraisal/templates/options.html:10
+msgid "autosubmit on paste"
+msgstr "autosubmit on paste. [default: off]"
+
+#: evepraisal/templates/options.html:11
+msgid "save for sharing"
+msgstr "save for sharing. [default: on]"
+
+#: evepraisal/templates/options.html:12
+msgid "enable external key"
+msgstr "enable external access key"
+
+msgid "refresh external key"
+msgstr "refresh external access key"
+
+#: evepraisal/templates/options.html:18
+msgid "character id"
+msgstr "username"
+
+#: evepraisal/templates/options.html:19
+msgid "secret key"
+msgstr "password"
+
+msgid "disabled"
+msgstr "disabled"
+
+#: evepraisal/templates/options.html:20
+msgid "disable external key"
+msgstr "disable external access key"
+
+#: evepraisal/templates/requirelogin.html:7
+msgid "login required"
+msgstr "Login Required"
+
+#: evepraisal/templates/requirelogin.html:8
+msgid "you must login"
+msgstr "You must be logged in to access content on this site. Click the button below to login, or, the login link at the top of the page."
+
+#~ msgid "hide buttons"
+#~ msgstr "hide buttons"
+
