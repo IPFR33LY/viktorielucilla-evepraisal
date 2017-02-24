@@ -1,6 +1,6 @@
 {% if full_page %}
-  {% extends 'index.html' %}
-  {% block title %}{{_('app title')}} - Result #{{ appraisal.Id }} [{{appraisal.Kind|format_kind}}]{% endblock %}
+    {% extends 'index.html' %}
+    {% block title %}{{ _('app title') }} - Result #{{ appraisal.Id }} [{{ appraisal.Kind|format_kind }}]{% endblock %}
 {% else %}
 <script>
   document.title = "{{_('app title')}} - Result #{{ appraisal.Id }} [{{appraisal.Kind|format_kind}}]";
@@ -35,7 +35,7 @@
     <h3>Errored Lines</h3>
   </div>
   <div class="modal-body">
-    <textarea class="input-block-level" rows="10">{% for line in appraisal.BadLines %}{{ line }}
+    <textarea class="input-block-level" rows="10" title="BadLines">{% for line in appraisal.BadLines %}{{ line }}
 {% endfor %}</textarea>
   </div>
   <div class="modal-footer">

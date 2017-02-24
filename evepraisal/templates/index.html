@@ -1,55 +1,66 @@
 {% extends "layout.%s.html"|format(config.TEMPLATE) %}
 {% block extra_javascript %}
-{{ super() }}
-<script type="text/javascript" src="{{ url_for('static', filename='templates.index.js') }}"></script>
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='templates.index.js') }}"></script>
 {% endblock %}
 {% block body %}
 
-<div class="row">
-  <div class="span5">
-    <h4>{{_('paste box title')}}</h4>
-    <form action="{{ url_for('estimate_cost') }}" method="post" class="well well-small" id="result_form">
-      <textarea class="input-block-level" type="text" name="raw_paste" id="raw_paste" rows="5" placeholder="{{_('paste box placeholder')}}"{% if require_login %} disabled{% endif %}></textarea>
-      <input type="hidden" name="load_full" value="1"/>
-      <input type="hidden" id="save" name="save" value="{{ session['options']['share'] }}" />
-      <input type="hidden" id="autosubmit" name="autosubmit" value="{{ session['options']['autosubmit'] }}" />
-      <div class="controls form-inline clearfix">
-        <div id="buttons" class="pull-left">
-          <button type="submit" id="result_submit" class="btn btn-primary"{% if require_login %} disabled{% endif %}>{{_('submit button')}}</button> 
-          <button type="reset" class="btn">{{_('reset button')}}</button>
-            <button type="button" id="result_buyback" class="btn btn-warning" href="results.html/#freighter"
-                    data-toggle="modal"> {{ _('buyback button') }}</button>
+    <div class="row">
+        <div class="span5">
+            <h4>{{ _('paste box title') }}</h4>
+            <form action="{{ url_for('estimate_cost') }}" method="post" class="well well-small" id="result_form">
+            <textarea class="input-block-level" type="text" name="raw_paste" id="raw_paste" rows="5"
+                      placeholder="{{ _('paste box placeholder') }}"{% if require_login %}
+                      disabled{% endif %} style="resize: vertical"></textarea>
+                <input type="hidden" name="load_full" value="1"/>
+                <input type="hidden" id="save" name="save" value="{{ session['options']['share'] }}"/>
+                <input type="hidden" id="autosubmit" name="autosubmit" value="{{ session['options']['autosubmit'] }}"/>
+                <div class="controls form-inline clearfix">
+                    <div id="buttons" class="pull-left">
+                        <button type="submit" id="result_submit" class="btn btn-primary"{% if require_login %}
+                                disabled{% endif %}>{{ _('submit button') }}</button>
+                        <button type="reset" class="btn">{{ _('reset button') }}</button>
+                    </div>
+
+                    <div class="pull-right">
+                        <select class="span2" id="market" style="float: none;">
+                            <option value='30000142'>Jita</option>
+                            <option value='30002187'>Amarr</option>
+                            <option value='30002659'>Dodixie</option>
+                            <option value='30002510'>Rens</option>
+                            <option value='30002053'>Hek</option>
+                            <option value='-1'>Universe</option>
+                        </select>
+                    </div>
+                </div>
+            </form><br /><br />
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4 class="h4">Test Row</h4>
+                    <form action="freighter.html" method="get" class="well well-small" id="buyback_results">
+            <textarea class="input-block-level" type="text" name="buyback_results" id="buyback_results" rows="5"
+                      placeholder="your buyback information will populate here" style="resize: vertical"></textarea>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <div class="pull-left input-append">
-            <select class="span3" id="market" style="float: none;">
-            <option value='30000142'>Jita</option>
-            <option value='30002187'>Amarr</option>
-            <option value='30002659'>Dodixie</option>
-            <option value='30002510'>Rens</option>
-            <option value='30002053'>Hek</option>
-            <option value='-1'>Universe</option>
-          </select>
+        <div class="span7" id="result_container">
+            {% block results %}
+
+                <div class="rightalign"><h5>Over {{ '%.4g'|format(appraisal_count)|float|int|comma_separated_int }}
+                    Appraisals Performed</h5></div>
+                <h4>{{ _('what do i do title') }}</h4>
+                <p>
+                    {{ _('what do i do') }}
+                </p>
+
+                <h4>{{ _('paste options title') }}</h4>
+                {{ _('paste options') }}
+
+            {% endblock %}
         </div>
-      </div>
-    </form>
-  </div>
-
-    <div class="span7" id="result_container">
-    {% block results %}
-
-      <div class="rightalign"><h5>Over {{ '%.4g'|format(appraisal_count)|float|int|comma_separated_int }} Appraisals Performed</h5></div>
-      <h4>{{_('what do i do title')}}</h4>
-      <p>
-         {{_('what do i do')}}
-      </p>
-
-      <h4>{{_('paste options title')}}</h4>
-       {{_('paste options')}}
-      
-    {% endblock %}
-  </div>
-</div>
+    </div>
 
     <div class="centeralign">{{ adspace() }}</div>
 {% endblock %}
