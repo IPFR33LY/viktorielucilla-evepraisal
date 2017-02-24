@@ -1,10 +1,10 @@
 import json
 
-from . import db
-from helpers import iter_types
-
 from sqlalchemy import types
 from sqlalchemy.exc import OperationalError
+
+from helpers import iter_types
+from . import db
 
 
 class JsonType(types.TypeDecorator):
@@ -21,6 +21,8 @@ class Appraisals(db.Model):
     __tablename__ = 'Appraisals'
 
     Id = db.Column(db.Integer(), primary_key=True)
+    #: Unique Random Identifier
+    rID = db.Column(db.Text(), unique=True, nullable=True)
     #: Bad Lines
     Kind = db.Column(db.Text(), index=True)
     #: Raw Input taken from the user
@@ -100,9 +102,6 @@ class Users(db.Model):
     Options = db.Column(db.Text())
     SecretKey = db.Column(db.Text())
 
-#class Contracts(db.Model):
-    # Filler
-
 def appraisal_count():
     # Postresql counts are slow.
     try:
@@ -119,6 +118,7 @@ def appraisal_count():
 def row_to_dict(row):
     return dict((col, getattr(row, col))
                 for col in row.__table__.columns.keys())
+
 
 def update_types_repackaged(types):
     """Updates a set of items to have a repackaged size where applicable."""

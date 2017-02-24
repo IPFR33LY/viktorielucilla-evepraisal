@@ -126,7 +126,7 @@ def main():
         with open(types_output_file, 'w') as f:
             f.write(json.dumps(all_types, indent=2))
     finally:
-        shutil.rmtree(temp_dir)
+        shutil.rmtree(temp_dir, [])
 
 
 if __name__ == '__main__':

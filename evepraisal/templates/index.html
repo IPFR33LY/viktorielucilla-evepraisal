@@ -17,11 +17,12 @@
         <div id="buttons" class="pull-left">
           <button type="submit" id="result_submit" class="btn btn-primary"{% if require_login %} disabled{% endif %}>{{_('submit button')}}</button> 
           <button type="reset" class="btn">{{_('reset button')}}</button>
-          <button type="button" id="result_buyback" class="btn btn-warning" >{{ _('buyback button')}}</button>
+            <button type="button" id="result_buyback" class="btn btn-warning" href="results.html/#freighter"
+                    data-toggle="modal"> {{ _('buyback button') }}</button>
         </div>
 
         <div class="pull-left input-append">
-          <select class="span3" id="market">
+            <select class="span3" id="market" style="float: none;">
             <option value='30000142'>Jita</option>
             <option value='30002187'>Amarr</option>
             <option value='30002659'>Dodixie</option>
@@ -33,7 +34,8 @@
       </div>
     </form>
   </div>
-  <div class="span7" id="result_container">
+
+    <div class="span7" id="result_container">
     {% block results %}
 
       <div class="rightalign"><h5>Over {{ '%.4g'|format(appraisal_count)|float|int|comma_separated_int }} Appraisals Performed</h5></div>
@@ -48,5 +50,6 @@
     {% endblock %}
   </div>
 </div>
-<div class="centeralign">{{ adspace() }}</div>
+
+    <div class="centeralign">{{ adspace() }}</div>
 {% endblock %}
