@@ -3,14 +3,13 @@
 import csv
 import io
 
+from flask import jsonify, url_for, redirect, request
 from sqlalchemy import desc
 
-from flask import jsonify, url_for, redirect, request
 from evepraisal.estimate import create_appraisal
-from evepraisal.helpers import login_required_if_config
 from evepraisal.filters import get_market_name
+from evepraisal.helpers import login_required_if_config
 from evepraisal.models import Appraisals
-
 from . import cache, g, session
 
 
@@ -45,6 +44,7 @@ def estimate_create(version):
             return estimate_json(appraisal.Id, version)
 
     return redirect(url_for(redirect_string, result_id=appraisal.Id), code=302)
+
 
 def estimate_history(version, request_format='json'):
     """Provides a list of historical estimates for the current user.
@@ -96,6 +96,7 @@ def estimate_history(version, request_format='json'):
 
     return output
 
+
 def estimate_retrieve(result_id):
     """Returns Appraisals data.
     On success, returns an Appraisals object and status code 200.
@@ -119,6 +120,7 @@ def estimate_retrieve(result_id):
 
     return "Not Found", 404
 
+
 def dict_to_csv_string(list_dicts, field_names=None):
     """Takes in a list of dicts, returns a csv-formatted string.
     """
@@ -138,16 +140,17 @@ def dict_to_csv_string(list_dicts, field_names=None):
 
     return string_io.getvalue().strip('\r\n')
 
+
 def estimate_csv(result_id, version):
     """ Retrieves an estimate and returns the item rows as a CSV formatted string.
     Returns a message (string), and an HTTP status code (int)
     """
     cache_key = "api:appraisal:csv:%s:%s" % (version, result_id)
 
-    ## This object should be a dict in the following format:
-    ## { data: { csv (string) formatted item data }, private: { user.Id } }
-    ##
-    ## private is populated if the appraisal is set to private with the owning user.Id
+    # This object should be a dict in the following format:
+    # { data: { csv (string) formatted item data }, private: { user.Id } }
+    #
+    # private is populated if the appraisal is set to private with the owning user.Id
     result = cache.get(cache_key)
     if result:
         if "private" in result:
@@ -195,8 +198,7 @@ def estimate_csv(result_id, version):
             row["item_repackaged_volume"] = rpkg
 
             csv_writer.writerow(row)
-        output = {}
-        output["data"] = string_io.getvalue().strip('\r\n')
+        output = {"data": string_io.getvalue().strip('\r\n')}
         if not message.Public:
             output["private"] = message.UserId
 
@@ -205,16 +207,17 @@ def estimate_csv(result_id, version):
 
     return "No Appraisal Found", 500
 
+
 def estimate_json(result_id, version):
     """ Retrieves an estimate and returns the item rows as a json formatted string.
     Returns a message (string), and an HTTP status code (int)
     """
     cache_key = "api:appraisal:json:%s:%s" % (version, result_id)
 
-    ## This object should be a dict in the following format:
-    ## { data: { json (string) formatted item data }, private: { user.Id } }
-    ##
-    ## private is populated if the appraisal is set to private with the owning user.Id
+    # This object should be a dict in the following format:
+    # { data: { json (string) formatted item data }, private: { user.Id } }
+    #
+    # private is populated if the appraisal is set to private with the owning user.Id
     result = cache.get(cache_key)
     if result:
         if "private" in result:

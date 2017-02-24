@@ -1,16 +1,14 @@
-import datetime
-import urllib2
-import json
-import xml.etree.ElementTree as ET
-import evepaste
 import time
-import math
+import urllib2
+import xml.etree.ElementTree as ET
 
-from . import app, cache, db, session, g
-from flask import render_template
+import evepaste
+
+from helpers import createsession
 from models import *
 from parser import parse
-from helpers import createsession
+from . import app, cache, session, g
+
 
 def memcache_type_key(typeId, options=None):
     if options is None:
@@ -141,8 +139,7 @@ def get_market_values_evemarketdata(eve_types, options=None):
     market_prices = {}
     solarsystem_id = options.get('solarsystem_id', '-1')
     for types in [eve_types[i:i + 200] for i in range(0, len(eve_types), 200)]:
-        typeIds_str = 'type_ids=%s' % ','.join(str(type_id)
-                                               for type_id in types)
+        typeIds_str = 'type_ids=%s' % ','.join(str(type_id) for type_id in types)
         query = [typeIds_str]
 
         if solarsystem_id != '-1':
@@ -192,8 +189,9 @@ def get_market_values_evemarketdata(eve_types, options=None):
         except urllib2.HTTPError:
             pass
         except ValueError:
-	        pass
+            pass
     return market_prices
+
 
 def price_volume_statistics(pricevolumedict):
     """ Calculates pricing statistics given a list of dicts
@@ -201,7 +199,7 @@ def price_volume_statistics(pricevolumedict):
     """
     pricevolumedict = sorted(pricevolumedict, key=lambda k: k['price'])
     if len(pricevolumedict) == 0:
-	    return {'avg': 0, 'max': 0, 'min': 0, 'bottom5pct': 0, 'top5pct': 0, 'volume': 0}
+        return {'avg': 0, 'max': 0, 'min': 0, 'bottom5pct': 0, 'top5pct': 0, 'volume': 0}
 
     maxprice = pricevolumedict[0]['price']
     minprice = pricevolumedict[0]['price']
@@ -411,6 +409,7 @@ def get_market_prices(modules, options=None):
 
     return prices.items()
 
+
 def create_appraisal(raw_paste, solar_system):
     if solar_system not in app.config['VALID_SOLAR_SYSTEMS'].keys():
         abort(400)
@@ -423,13 +422,13 @@ def create_appraisal(raw_paste, solar_system):
         return str(ex)
 
     # Populate types with pricing data
-    prices = get_market_prices(list(parse_results['unique_items']),
-                               options={'solarsystem_id': solar_system})
+    prices = get_market_prices(list(parse_results['unique_items']), options={'solarsystem_id': solar_system})
 
     # create a session if we need one
     createsession()
 
     appraisal = Appraisals(Created=int(time.time()),
+                           rID=uuid.uuid4().hex,
                            RawInput=raw_paste,
                            Kind=parse_results['representative_kind'],
                            Prices=prices,
@@ -447,4 +446,4 @@ def create_appraisal(raw_paste, solar_system):
                      appraisal.Id,
                      parse_results['representative_kind'])
 
-    return appraisal;
+    return appraisal

@@ -2,20 +2,20 @@
 """
     Evepraisal
 """
-import locale
+import base64
 import json
+import locale
 import os
 import sys
-import base64
 
 from flask import Flask, g, session, request
-from flask_cache import Cache
-from flask_sqlalchemy import SQLAlchemy
 from flask_babel import Babel
+from flask_cache import Cache
 from flask_oauthlib.client import OAuth
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-#app.run(debug=True)
+# app.run(DEBUG=True)
 # configuration
 CONFIG_EVEPRAISAL_DEBUG = os.environ.get("CONFIG_EVEPRAISAL_DEBUG", "False")
 

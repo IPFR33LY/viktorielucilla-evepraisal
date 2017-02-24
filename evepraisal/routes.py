@@ -16,6 +16,7 @@ app.route('/e/<int:result_id>')(views.display_result)
 app.route('/estimate/<int:result_id>', methods=['GET'])(views.display_result)
 app.route('/latest')(views.latest)
 app.route('/legal')(views.legal)
+# app.route('/freighter')(views.display_buyback_form())
 
 # Static Stuff (should really be served from a legit file server)
 app.route('/robots.txt')(views.static_from_root)
