@@ -1,7 +1,8 @@
 import uuid
-
 from functools import wraps
+
 from flask import g, redirect, url_for, request, flash, session
+
 from . import app
 
 
@@ -13,6 +14,7 @@ def login_required_if_config(func):
         return func(*args, **kwargs)
     return decorated_function
 
+
 def login_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
@@ -22,12 +24,14 @@ def login_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
+
 @app.context_processor
 def inject_ad_and_tracking_parameters():
     return dict(
         google_ads=app.config["CONFIG_GOOGLE_ADS"],
         google_analytics=app.config["CONFIG_GOOGLE_ANALYTICS"]
     )
+
 
 def iter_types(kind, result):
     if kind == 'bill_of_materials':
@@ -62,6 +66,7 @@ def iter_types(kind, result):
         for item in result:
             item['quantity'] = item.get('quantity', 1)
             yield item
+
 
 def createsession():
     """ this method creates a session if one doesn't exist.

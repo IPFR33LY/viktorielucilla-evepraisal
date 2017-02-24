@@ -1,5 +1,6 @@
 import time
 import urllib2
+import uuid
 import xml.etree.ElementTree as ET
 
 import evepaste
@@ -100,6 +101,11 @@ def get_market_values(eve_types, options=None):
 
         except urllib2.HTTPError:
             pass
+    #: Debugging Market_Prices
+    #:
+    #: f = open('C:\open.txt', 'w')
+    #: f.write(str(market_prices))
+    #: f.close()
     return market_prices
 
 
@@ -151,7 +157,7 @@ def get_market_values_evemarketdata(eve_types, options=None):
         query_str = '&'.join(query)
 
         url = "http://api.eve-marketdata.com/api/item_prices2.json?" \
-            "char_name=magerawr&buysell=a&%s" % (query_str)
+              "char_name=magerawr&buysell=a&%s" % (query_str)
         app.logger.debug("API Call: %s", url)
         try:
             request = urllib2.Request(url)
@@ -248,6 +254,7 @@ def price_volume_statistics(pricevolumedict):
         "volume": totalvolume
     }
 
+
 def get_market_values_crest(eve_types, options=None):
     """ Takes list of typeIds. Returns dict of pricing details with typeId as
         the key. Calls out to EVE CREST.
@@ -264,11 +271,11 @@ def get_market_values_crest(eve_types, options=None):
     market_prices = {}
 
     regions = {
-        "30000142": "10000002", # JITA
-        "30002187": "10000043", # AMARR
-        "30002659": "10000032", # DODIXIE
-        "30002510": "10000030", # RENS
-        "30002053": "10000042", # HEK
+        "30000142": "10000002",  # JITA
+        "30002187": "10000043",  # AMARR
+        "30002659": "10000032",  # DODIXIE
+        "30002510": "10000030",  # RENS
+        "30002053": "10000042",  # HEK
     }
 
     solarsystem_id = options.get('solarsystem_id', '-1')
@@ -280,7 +287,8 @@ def get_market_values_crest(eve_types, options=None):
 
     for types in [eve_types[i:i + 200] for i in range(0, len(eve_types), 200)]:
         for type_id in types:
-            url = "https://crest-tq.eveonline.com/market/%s/orders/?type=https://crest-tq.eveonline.com/inventory/types/%s/" % (region , type_id)
+            url = "https://crest-tq.eveonline.com/market/%s/orders/?type=https://crest-tq.eveonline.com/inventory/types/%s/" % (
+                region, type_id)
             app.logger.debug("API Call: %s", url)
             try:
                 request = urllib2.Request(url)
@@ -305,9 +313,12 @@ def get_market_values_crest(eve_types, options=None):
                 output_sell = price_volume_statistics(sell)
 
                 output = {
-                    "all":  { "avg": output_all['avg'], "max": output_all['max'], "min": output_all['min'], "volume": output_all['volume'] },    
-                    "buy":  { "avg": output_buy['avg'], "max": output_buy['max'], "min": output_buy['min'], "volume": output_buy['volume'] },    
-                    "sell":  { "avg": output_sell['avg'], "max": output_sell['max'], "min": output_sell['min'], "volume": output_sell['volume'] },    
+                    "all": {"avg": output_all['avg'], "max": output_all['max'], "min": output_all['min'],
+                            "volume": output_all['volume']},
+                    "buy": {"avg": output_buy['avg'], "max": output_buy['max'], "min": output_buy['min'],
+                            "volume": output_buy['volume']},
+                    "sell": {"avg": output_sell['avg'], "max": output_sell['max'], "min": output_sell['min'],
+                             "volume": output_sell['volume']},
                     "source": "crest"
                 }
 
@@ -319,7 +330,12 @@ def get_market_values_crest(eve_types, options=None):
 
             except urllib2.HTTPError:
                 pass
+    #: Debugging market_prices
+    #: f = open('C:\open.txt', 'w')
+    #: f.write(str(market_prices))
+    #: f.close()
     return market_prices
+
 
 def get_invalid_values(eve_types, options=None):
     invalid_items = {}
@@ -372,23 +388,24 @@ def get_market_prices(modules, options=None):
     for pricing_method in [get_invalid_values,
                            get_cached_values,
                            get_componentized_values,
-                           get_market_values,
                            get_market_values_crest,
+                           get_market_values,
                            get_market_values_evemarketdata
                            ]:
         if len(modules) == len(prices):
             break
         # each pricing_method returns a dict with {type_id: pricing_info}
         _prices = pricing_method(unpriced_modules, options=options)
-        # app.logger.debug("Found %s/%s items using method: %s",
-        #                  len(_prices), len(modules), pricing_method)
+        app.logger.debug("Found %s/%s items using method: %s",
+                         len(_prices), len(modules), pricing_method)
         for type_id, pricing_info in _prices.items():
             if type_id in unpriced_modules:
                 # We only care if there is a non-zero price. If the price is 0, keep going.
-                if pricing_info['buy']['price'] > 0 or pricing_info['sell']['price'] > 0 or pricing_info['all']['price'] > 0:
+                if pricing_info['buy']['price'] > 0 or pricing_info['sell']['price'] > 0 or pricing_info['all'][
+                    'price'] > 0:
                     if pricing_method not in [get_invalid_values, get_cached_values]:
                         # And only cache things which come from an actual provider.
-                        cache.set(memcache_type_key(type_id, options=options), pricing_info, timeout = 10 * 60 * 60)
+                        cache.set(memcache_type_key(type_id, options=options), pricing_info, timeout=10 * 60 * 60)
                     prices[type_id] = pricing_info
                     unpriced_modules.remove(type_id)
                     if type_id in nmv:
