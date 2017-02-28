@@ -76,11 +76,12 @@
         </div>
     </div>
 
-{% if not is_from_igb() and not full_page %}
+
 <script>
 $(document).ready(function() {
+  {% if not is_from_igb() and not full_page %}
       window.history.replaceState('Object', 'Title', '{{ url_for('display_result', result_id=appraisal.Id) }}');
+  {% endif %}
 });
 </script>
-{% endif %}
 {% endblock %}

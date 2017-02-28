@@ -299,8 +299,15 @@ def get_market_values_crest(eve_types, options=None):
                 all = []
 
                 i = 0
+                for order in response["items"]:
+                    i += 1
+                    if order["location"]["id"] != int(60003760):
+                        response["items"].pop(i - 1)
+                        i -= 1
+
+                i = 0
                 for item in response["items"]:
-                    i = i + 1
+                    i += 1
                     if item["buy"]:
                         buy.append({"i": i, "volume": item["volume"], "price": item["price"]})
                     else:
@@ -402,7 +409,7 @@ def get_market_prices(modules, options=None):
             if type_id in unpriced_modules:
                 # We only care if there is a non-zero price. If the price is 0, keep going.
                 if pricing_info['buy']['price'] > 0 or pricing_info['sell']['price'] > 0 or pricing_info['all'][
-                        'price'] > 0:
+                    'price'] > 0:
                     if pricing_method not in [get_invalid_values, get_cached_values]:
                         # And only cache things which come from an actual provider.
                         cache.set(memcache_type_key(type_id, options=options), pricing_info, timeout=10 * 60 * 60)

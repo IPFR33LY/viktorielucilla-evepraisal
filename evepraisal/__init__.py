@@ -33,7 +33,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # no memcached support for windows, and we need to flip slashes. deal with it.
 if sys.platform == 'win32':
-    app.config['CACHE_TYPE'] = 'simple'
+    app.config['CACHE_TYPE'] = 'memcached'
     app.config['SQLALCHEMY_DATABASE_URI'] = (
         'sqlite:///%s\data\scans.db' % os.getcwd()
     )

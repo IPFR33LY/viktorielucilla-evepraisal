@@ -18,7 +18,7 @@ import urllib2
 COMP_TYPES = [
     659,  # Super Carriers
     547,  # Carriers
-    30,   # Titans
+    30,  # Titans
     485,  # Dreadnoughts
     883,  # Industrial Capitals
 ]
@@ -41,10 +41,10 @@ def download_database(destination_path):
 
             bytes_read += len(data)
             print("Progress: %d of %d bytes (%0.2f%% complete)" % (
-                  bytes_read,
-                  total_bytes,
-                  float(bytes_read)/total_bytes * 100,
-                  ))
+                bytes_read,
+                total_bytes,
+                float(bytes_read) / total_bytes * 100,
+            ))
 
             decompressed_data = decompressor.decompress(data)
             if decompressed_data is not None:
@@ -52,7 +52,6 @@ def download_database(destination_path):
 
 
 def build_all_types(cursor):
-
     inv_type_materials = collections.defaultdict(list)
     for row in cursor.execute('SELECT * FROM invtypematerials'):
         inv_type_materials[row['typeID']].append({
@@ -65,14 +64,14 @@ def build_all_types(cursor):
          group_id,
          type_name,
          volume,
-         market_group_id) in cursor.execute('''
-SELECT
-    typeID,
-    groupID,
-    typeName,
-    volume,
-    marketGroupID
-FROM invtypes'''):
+         market_group_id) in cursor.execute('\n'
+                                            '            SELECT\n'
+                                            '                typeID,\n'
+                                            '                groupID,\n'
+                                            '                typeName,\n'
+                                            '                volume,\n'
+                                            '                marketGroupID\n'
+                                            '            FROM invtypes'):
 
         print("Populating info for: %s" % type_name)
         try:
@@ -87,21 +86,23 @@ FROM invtypes'''):
             'typeName': type_name,
             'volume': volume or 0.0,
             'market': has_market,
+            'marketGroupName': marketGroupName,
         }
 
         # Save the components for certain types that aren't commonly found
         # on the market
         if (
-            group_id in COMP_TYPES and
-            type_id in inv_type_materials
+                        group_id in COMP_TYPES and
+                        type_id in inv_type_materials
         ):
-
             d['components'] = [{'typeID': material['type_id'],
                                 'materialTypeID': material['material_type_id'],
                                 'quantity': material['quantity']}
                                for material
                                in inv_type_materials[type_id]]
-
+        for (marketGroupName) in cursor.execute(
+                '''SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id''', {id: group_id}):
+            d['marketGroupName'] = marketGroupName
         yield d
 
 

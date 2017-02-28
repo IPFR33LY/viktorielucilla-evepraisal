@@ -30,21 +30,19 @@ def estimate_cost():
     # Yes, this returns a string on exception. I really don't care.
     if not isinstance(appraisal, basestring):
         return render_template('results.html', appraisal=appraisal)
-    # return redirect(url_for('display_result', result_id=appraisal.Id), code=302)
     else:
         return render_template('error.html', error='Error when parsing input: ' + str(appraisal))
-
 
 @login_required_if_config
 def display_result(result_id):
     message, status = estimate_retrieve(result_id)
-
     if not status == 200:
         return message, status
+    return redirect(url_for(display_result, appraisal=message,result_id=message.id, full_page=True))
 
-    return render_template('results.html', appraisal=message, full_page=True)
+    #render_template('results.html', appraisal=message, full_page=True)
 
-
+ #appraisal=message, full_page=True
 @login_required
 def options():
     if request.method == 'POST':
