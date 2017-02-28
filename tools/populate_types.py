@@ -80,13 +80,14 @@ def build_all_types(cursor):
             continue
 
         has_market = market_group_id is not None
+        has_marketGroupname = False
         d = {
             'typeID': type_id,
             'groupID': group_id,
             'typeName': type_name,
             'volume': volume or 0.0,
             'market': has_market,
-            'marketGroupName': marketGroupName,
+            'marketGroupName': has_marketGroupname,
         }
 
         # Save the components for certain types that aren't commonly found
@@ -100,9 +101,10 @@ def build_all_types(cursor):
                                 'quantity': material['quantity']}
                                for material
                                in inv_type_materials[type_id]]
-        for (marketGroupName) in cursor.execute(
-                '''SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id''', {id: group_id}):
-            d['marketGroupName'] = marketGroupName
+        if group_id is not None:
+            for (marketGroupName) in cursor.execute(
+                    "SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id", {"id": group_id}):
+                    d['marketGroupName'] = marketGroupName
         yield d
 
 
