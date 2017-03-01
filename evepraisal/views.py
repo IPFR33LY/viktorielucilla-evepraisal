@@ -36,13 +36,12 @@ def estimate_cost():
 @login_required_if_config
 def display_result(result_id):
     message, status = estimate_retrieve(result_id)
+
     if not status == 200:
         return message, status
-    return redirect(url_for(display_result, appraisal=message,result_id=message.id, full_page=True))
 
-    #render_template('results.html', appraisal=message, full_page=True)
+    return render_template('results.html', appraisal=message, full_page=True)
 
- #appraisal=message, full_page=True
 @login_required
 def options():
     if request.method == 'POST':
@@ -72,9 +71,7 @@ def options():
     if g.user.SecretKey is not None:
         combinedKey = base64.b64encode(g.user.OpenId + ':' + g.user.SecretKey)
 
-    return render_template('options.html', characterid=session['character']['CharacterID'], secretkey=g.user.SecretKey,
-                           combinedkey=combinedKey)
-
+    return render_template('options.html', characterid=session['character']['CharacterID'],secretkey=g.user.SecretKey,combinedkey=combinedKey)
 
 @login_required_if_config
 def history():
@@ -85,14 +82,13 @@ def history():
     elif 'epsessionid' in session:
         q = q.filter(Appraisals.SessionId == session['epsessionid'])
     else:
-        q = q.filter(1 == 2)
+        q = q.filter(1==2)
 
     q = q.order_by(desc(Appraisals.Created))
     q = q.limit(100)
     appraisals = q.all()
 
     return render_template('history.html', appraisals=appraisals)
-
 
 @login_required_if_config
 def latest():
@@ -130,11 +126,6 @@ def index():
 def legal():
     return render_template('legal.html')
 
-
-def freighter():
-    return render_template("freighter.html")
-
-
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 
@@ -144,7 +135,7 @@ def login():
     if 'character' in session:
         return redirect(url_for('index'))
     elif request.args.get('required', '') == 'yes':
-        return render_template('requirelogin.html');
+        return render_template('requirelogin.html')
     else:
         return evesso.authorize(callback=url_for('openauth_callback', _external=True, _scheme="https"))
 

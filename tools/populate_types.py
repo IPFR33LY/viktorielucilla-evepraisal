@@ -52,7 +52,8 @@ def download_database(destination_path):
                 f.write(decompressed_data)
 
 
-def build_all_types(cursor):
+def build_all_types(cursor, c2, c3):
+    global market_parent_id
     inv_type_materials = collections.defaultdict(list)
     for row in cursor.execute('SELECT * FROM invtypematerials'):
         inv_type_materials[row['typeID']].append({
@@ -87,6 +88,10 @@ FROM invtypes'''):
             'typeName': type_name,
             'volume': volume or 0.0,
             'market': has_market,
+            'marketInfo': {'mainmarketgroupInfo': {'parentGroupID': '',
+                                                   'parentMarketName': ''},
+                           'submarketgroupInfo': {'marketGroupID': market_group_id,
+                                                  'marketGroupName': ''}},
         }
 
         # Save the components for certain types that aren't commonly found
@@ -101,46 +106,25 @@ FROM invtypes'''):
                                 'quantity': material['quantity']}
                                for material
                                in inv_type_materials[type_id]]
-       # if group_id is not None:
-       #     marketgroupname = cursor.execute("SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id",
-        #                                     {"id": group_id})
-        #    if marketgroupname.description[0][1] is not None:
-       #         d['marketGroupName'] = marketgroupname.description["0"]["1"]
-        db_path = "C:\\Users\\Andrew\\AppData\\Local\\Temp\\tmpvpgp20\\eve-db.sqlite"
-        conn2 = sqlite3.connect(db_path)
-        conn2.row_factory = sqlite3.Row
-        conn2.text_factory = str
-        c2 = conn2.cursor()
         if market_group_id is not None:
-            for (market_group_name) in c2.execute("SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id",{"id": market_group_id}):
-                d['marketGroupName'] = market_group_name[0]
+            for (market_group_name, market_parent_id) in c2.execute('''
+SELECT marketGroupName, parentGroupID FROM invMarketGroups WHERE marketGroupID=:id
+''', {"id": market_group_id}):
+                d['marketInfo']['mainmarketgroupInfo']['parentGroupID'] = market_parent_id
+                d['marketInfo']['submarketgroupInfo']['marketGroupName'] = market_group_name
+            market_parent_name = c3.execute('''SELECT marketGroupName from invMarketGroups WHERE marketGroupID=:id''',
+                                            {"id": market_parent_id}).fetchall()[0][0]
+            d['marketInfo']['mainmarketgroupInfo']['parentMarketName'] = market_parent_name
         yield d
 
 
-def addmarketgroupname(group_id):
-    db_path = "C:\\Users\\Andrew\\AppData\\Local\\Temp\\tmpvpgp20\\eve-db.sqlite"
-    conn2 = sqlite3.connect(db_path)
-    conn2.row_factory = sqlite3.Row
-    conn2.text_factory = str
-    c2 = conn2.cursor()
-
-    for (market_Groupname) in c2.execute("SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id", {"id": group_id}):
-        t = {
-            'marketGroupName': market_Groupname,
-        }
-        if t['marketGroupName'] == '':
-            return "False"
-        else:
-            c2.close()
-            return t['marketGroupName']
-
 def main():
     #temp_dir = tempfile.mkdtemp()
+    global c
     try:
-        #db_path = os.path.join(temp_dir, 'eve-db.sqlite')
-        #print("Writing sqlite database to %s" % db_path)
-        #download_database(db_path)
-        db_path = "C:\\Users\\Andrew\\AppData\\Local\\Temp\\tmpvpgp20\\eve-db.sqlite"
+        db_path = "c:\\users\\nihanke\\appdata\\local\\temp\\tmppm_22g\\eve-db.sqlite"  #os.path.join(temp_dir, 'eve-db.sqlite')
+        print("Writing sqlite database to %s" % db_path)
+       # download_database(db_path)
 
         print("Opening database file")
         conn = sqlite3.connect(db_path)
@@ -148,17 +132,28 @@ def main():
         conn.text_factory = str
         c = conn.cursor()
 
-        print("Build type information")
-        all_types = list(build_all_types(c))
+        # Create a second cursor
+        conn2 = sqlite3.connect(db_path)
+        conn2.row_factory = sqlite3.Row
+        conn2.text_factory = str
+        c2 = conn2.cursor()
 
-        types_output_file = "C:\\Users\\Andrew\\PycharmProjects\\viktorielucilla-evepraisal\\data\\types.json"
+        # create a third cursor
+        conn3 = sqlite3.connect(db_path)
+        conn3.row_factory = sqlite3.Row
+        conn3.text_factory = str
+        c3 = conn3.cursor()
+
+        print("Build type information")
+        all_types = list(build_all_types(c, c2, c3))
+
+        types_output_file = 'C:\\Users\\nihanke\\PycharmProjects\\viktorielucilla-evepraisal\\data\\types.json'
         print("Output types to %s" % types_output_file)
         with open(types_output_file, 'w') as f:
-            f.write(json.dumps(all_types, indent=2))
+            f.write(json.dumps(all_types, indent=None))
     finally:
         c.close()
-        #shutil.rmtree(temp_dir, [])
-
+        # shutil.rmtree(temp_dir, [])
 
 if __name__ == '__main__':
     main()
