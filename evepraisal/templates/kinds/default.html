@@ -16,50 +16,50 @@
     {% set typeID = item.typeID|default(1) %}
     {% set groupID = item.groupID|default(1) %}
 
-    <tr class="line-item-row {% if item.destroyed %}error{% endif %}">
-        <td class="rightalign">{{ item.quantity|comma_separated_int }}</td>
-        <td>
-            <div class="media">
-                {% set market_url = "http://eve-central.com/home/quicklook.html?typeid=%s"|format(typeID) %}
-                {% if is_from_igb() %}<a href="#" onclick="CCPEVE.showMarketDetails({{ typeID }})"> {% else %}
-                    <a href="{{ market_url }}" target="_blank">{% endif %}<img class="pull-left media-object"
-                                                                               src="https://image.eveonline.com/Type/{{ typeID }}_32.png"
-                                                                               alt="{{ item.typeName }}"></a> &nbsp;<a
-                    href="{{ market_url }}" target="_blank">{{ name }}</a>
-            </div>
-        </td>
-        <td class="rightalign">
-            {% if appraisal.Kind == 'cargo_scan' and item.get('repackaged_volume',0) > 0 %}
-            {{ item.repackaged_volume|format_volume }}
-            {% else %}
-            {{ item.volume|format_volume }}
-            {% endif %}
-        </td>
-        {% if item.prices.buy and item.prices.sell %}
-          {% set representative_price = item.prices.sell.price or item.prices.buy.price %}
-          <td class="rightalign" data-sort="-{{ representative_price }}">
-                {{ print_price_cell(item.prices.sell) }}<br/>
-                {{ print_price_cell(item.prices.buy) }}
-            </td>
-            <td class="rightalign" data-sort="-{{ representative_price * item.quantity|float }}">
-              {{ print_price_cell(item.prices.sell, item.quantity) }}<br/>
-             {{ print_price_cell(item.prices.buy, item.quantity) }}
-            </td>
-            <td class="rightalign" data-sort="-{{ representative_price / (item.volume or 1) }}">
-                {% if appraisal.Kind == 'cargo_scan' and item.get('repackaged_volume',0) > 0 %}
-                        {{ print_price_cell(item.prices.sell, 1/(item.repackaged_volume or 1)) }}<br/>
-                        {{ print_price_cell(item.prices.buy, 1/(item.repackaged_volume or 1)) }}
-                    {% else %}
-                        {{ print_price_cell(item.prices.sell, 1/(item.volume or 1)) }}<br/>
-                        {{ print_price_cell(item.prices.buy, 1/(item.volume or 1)) }}
-                {% endif %}
-            </td>
+<tr class="line-item-row {% if item.destroyed %}error{% endif %}">
+    <td class="rightalign">{{ item.quantity|comma_separated_int }}</td>
+    <td>
+        <div class="media">
+            {% set market_url = "http://eve-central.com/home/quicklook.html?typeid=%s"|format(typeID) %}
+            {% if is_from_igb() %}<a href="#" onclick="CCPEVE.showMarketDetails({{ typeID }})"> {% else %}
+                <a href="{{ market_url }}" target="_blank">{% endif %}<img class="pull-left media-object"
+                                                                           src="https://image.eveonline.com/Type/{{ typeID }}_32.png"
+                                                                           alt="{{ item.typeName }}"></a> &nbsp;<a
+                href="{{ market_url }}" target="_blank">{{ name }}</a>
+        </div>
+    </td>
+    <td class="rightalign">
+        {% if appraisal.Kind == 'cargo_scan' and item.get('repackaged_volume',0) > 0 %}
+        {{ item.repackaged_volume|format_volume }}
         {% else %}
-            <td class="rightalign" data-sort="-1"><span class="warning-message">Unknown</span></td>
-            <td class="rightalign" data-sort="-1"><span class="warning-message">Unknown</span></td>
-            <td class="rightalign" data-sort="-1"><span class="warning-message">Unknown</span></td>
+        {{ item.volume|format_volume }}
         {% endif %}
-    </tr>
+    </td>
+    {% if item.prices.buy and item.prices.sell %}
+    {% set representative_price = item.prices.sell.price or item.prices.buy.price %}
+    <td class="rightalign" data-sort="-{{ representative_price }}">
+            {{ print_price_cell(item.prices.sell) }}<br/>
+            {{ print_price_cell(item.prices.buy) }}
+    </td>
+    <td class="rightalign" data-sort="-{{ representative_price * item.quantity|float }}">
+          {{ print_price_cell(item.prices.sell, item.quantity) }}<br/>
+         {{ print_price_cell(item.prices.buy, item.quantity) }}
+    </td>
+    <td class="rightalign" data-sort="-{{ representative_price / (item.volume or 1) }}">
+        {% if appraisal.Kind == 'cargo_scan' and item.get('repackaged_volume',0) > 0 %}
+            {{ print_price_cell(item.prices.sell, 1/(item.repackaged_volume or 1)) }}<br/>
+            {{ print_price_cell(item.prices.buy, 1/(item.repackaged_volume or 1)) }}
+        {% else %}
+            {{ print_price_cell(item.prices.sell, 1/(item.volume or 1)) }}<br/>
+            {{ print_price_cell(item.prices.buy, 1/(item.volume or 1)) }}
+        {% endif %}
+    </td>
+{% else %}
+    <td class="rightalign" data-sort="-1"><span class="warning-message">Unknown</span></td>
+    <td class="rightalign" data-sort="-1"><span class="warning-message">Unknown</span></td>
+    <td class="rightalign" data-sort="-1"><span class="warning-message">Unknown</span></td>
+{% endif %}
+</tr>
 {%- endmacro %}
 
 <div>

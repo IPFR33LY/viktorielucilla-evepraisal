@@ -51,30 +51,32 @@
     {% set totals = appraisal.totals() %}
     {% set buytotal = totals.buy|int() %}
     {% set BuyBackTotal = buytotal * 0.98 %}
-    <button type="button" id="result_buyback" class="btn btn-warning" href="freighter.html/#freighter"
-            data-toggle="modal"> {{ _('buyback button') }}</button>
-    <div id="freighter" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="freighter"
-         aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-            <h3>BuyBack</h3>
-        </div>
-        <div class="modal-body">
-            <div>
-                <div class="col-md-4" style="border: thin red;background-color: red">
-                    <p class="alert text-warning">{{ BuyBackTotal|format_isk }} 98%</p>
-                    <p></p>
-                </div>
-                <div class="col-md-4" style="border: solid blue;">
-                    <p class="text-info">Additional</p>
-                </div>
 
+<button type="button" id="result_buyback" class="btn btn-warning" href="freighter.html/#freighter"
+        data-toggle="modal"> {{ _('buyback button') }}</button>
+
+<div id="freighter" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="freighter"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3>BuyBack</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <div class="col-md-4" style="border: thin red;background-color: red">
+                <p class="alert text-warning">{{ BuyBackTotal|format_isk }} 98%</p>
+                <p></p>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+            <div class="col-md-4" style="border: solid blue;">
+                <p class="text-info">Additional</p>
             </div>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
         </div>
     </div>
+</div>
 
 
 <script>

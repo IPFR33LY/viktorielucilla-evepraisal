@@ -126,6 +126,7 @@ def index():
 def legal():
     return render_template('legal.html')
 
+
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 

@@ -41,7 +41,6 @@ class Appraisals(db.Model):
     UserId = db.Column(db.Integer(), db.ForeignKey('Users.Id'), index=True)
     SessionId = db.Column(db.Text(), nullable=True, index=True)
 
-
     def totals(self):
         total_sell = total_buy = total_volume = total_repackaged = 0
 
@@ -64,7 +63,7 @@ class Appraisals(db.Model):
                 else:
                     total_repackaged += item['volume'] * quantity
 
-        return {'sell': total_sell, 'buy': total_buy, 'volume': total_volume, 'repackaged' : total_repackaged}
+        return {'sell': total_sell, 'buy': total_buy, 'volume': total_volume, 'repackaged': total_repackaged}
 
     def result_list(self):
         """ Returns a structure that looks like this:
@@ -102,6 +101,7 @@ class Users(db.Model):
     Options = db.Column(db.Text())
     SecretKey = db.Column(db.Text())
 
+
 def appraisal_count():
     # Postresql counts are slow.
     try:
@@ -127,6 +127,7 @@ def update_types_repackaged(types):
         if rpkg_volume > -1:
             t['repackaged_volume'] = rpkg_volume
 
+
 def get_repackaged_volume(groupId):
     """ This returns the repackaged size for a particular group."""
     shiptype = ''
@@ -149,27 +150,31 @@ def get_repackaged_volume(groupId):
         shiptype = 'bship'
 
     return {
-        'shuttle' : 500,
-        'frigate' : 2500,
-        'mining' : 3750,
-        'destroyer' : 5000,
-        'cruiser' : 10000,
-        'bcruiser' : 15000,
-        'industrial' : 20000,
-        'bship' : 50000,
-        '' : -1
+        'shuttle': 500,
+        'frigate': 2500,
+        'mining': 3750,
+        'destroyer': 5000,
+        'cruiser': 10000,
+        'bcruiser': 15000,
+        'industrial': 20000,
+        'bship': 50000,
+        '': -1
     }[shiptype]
+
 
 TYPES = json.loads(open('data/types.json').read())
 update_types_repackaged(TYPES)
 TYPES_BY_NAME = dict((t['typeName'].lower(), t) for t in TYPES)
 TYPES_BY_ID = dict((t['typeID'], t) for t in TYPES)
+TYPES_BY_MARKETPARENTNAME = dict((t['marketInfo']['mainmarketgroupInfo']['parentMarketName'].lower(), t) for t in TYPES)
+TYPES_BY_MARKETGROUPNAME = dict((t['marketInfo']['submarketgroupInfo']['marketGroupName'].lower(), t) for t in TYPES)
+
 
 def get_type_by_name(name):
     if not name:
         return
     s = name.lower().strip()
-    return (TYPES_BY_NAME.get(s.rstrip('*')) or TYPES_BY_NAME.get(s))
+    return TYPES_BY_NAME.get(s.rstrip('*')) or TYPES_BY_NAME.get(s)
 
 
 def get_type_by_id(typeID):
