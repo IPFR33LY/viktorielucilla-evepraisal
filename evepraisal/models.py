@@ -181,3 +181,15 @@ def get_type_by_id(typeID):
     if not typeID:
         return
     return TYPES_BY_ID.get(typeID)
+
+
+def get_type_by_marketparentname(parentMarketname):
+    if not parentMarketname:
+        return
+    return TYPES_BY_MARKETPARENTNAME.get(parentMarketname)
+
+
+def get_type_by_marketgroupname(marketGroupName):
+    if not marketGroupName:
+        return
+    return TYPES_BY_MARKETGROUPNAME.get(TYPES_BY_MARKETGROUPNAME)
