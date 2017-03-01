@@ -6,6 +6,7 @@ from __future__ import print_function
 
 import bz2
 import collections
+import importlib
 import json
 import os
 import shutil
@@ -64,14 +65,14 @@ def build_all_types(cursor):
          group_id,
          type_name,
          volume,
-         market_group_id) in cursor.execute('\n'
-                                            '            SELECT\n'
-                                            '                typeID,\n'
-                                            '                groupID,\n'
-                                            '                typeName,\n'
-                                            '                volume,\n'
-                                            '                marketGroupID\n'
-                                            '            FROM invtypes'):
+         market_group_id) in cursor.execute('''
+SELECT
+    typeID,
+    groupID,
+    typeName,
+    volume,
+    marketGroupID
+FROM invtypes'''):
 
         print("Populating info for: %s" % type_name)
         try:
@@ -80,14 +81,12 @@ def build_all_types(cursor):
             continue
 
         has_market = market_group_id is not None
-        has_marketGroupname = False
         d = {
             'typeID': type_id,
             'groupID': group_id,
             'typeName': type_name,
             'volume': volume or 0.0,
             'market': has_market,
-            'marketGroupName': has_marketGroupname,
         }
 
         # Save the components for certain types that aren't commonly found
@@ -96,24 +95,52 @@ def build_all_types(cursor):
                         group_id in COMP_TYPES and
                         type_id in inv_type_materials
         ):
+
             d['components'] = [{'typeID': material['type_id'],
                                 'materialTypeID': material['material_type_id'],
                                 'quantity': material['quantity']}
                                for material
                                in inv_type_materials[type_id]]
-        if group_id is not None:
-            for (marketGroupName) in cursor.execute(
-                    "SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id", {"id": group_id}):
-                    d['marketGroupName'] = marketGroupName
+       # if group_id is not None:
+       #     marketgroupname = cursor.execute("SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id",
+        #                                     {"id": group_id})
+        #    if marketgroupname.description[0][1] is not None:
+       #         d['marketGroupName'] = marketgroupname.description["0"]["1"]
+        db_path = "C:\\Users\\Andrew\\AppData\\Local\\Temp\\tmpvpgp20\\eve-db.sqlite"
+        conn2 = sqlite3.connect(db_path)
+        conn2.row_factory = sqlite3.Row
+        conn2.text_factory = str
+        c2 = conn2.cursor()
+        if market_group_id is not None:
+            for (market_group_name) in c2.execute("SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id",{"id": market_group_id}):
+                d['marketGroupName'] = market_group_name[0]
         yield d
 
 
+def addmarketgroupname(group_id):
+    db_path = "C:\\Users\\Andrew\\AppData\\Local\\Temp\\tmpvpgp20\\eve-db.sqlite"
+    conn2 = sqlite3.connect(db_path)
+    conn2.row_factory = sqlite3.Row
+    conn2.text_factory = str
+    c2 = conn2.cursor()
+
+    for (market_Groupname) in c2.execute("SELECT marketGroupName FROM invMarketGroups WHERE marketGroupID=:id", {"id": group_id}):
+        t = {
+            'marketGroupName': market_Groupname,
+        }
+        if t['marketGroupName'] == '':
+            return "False"
+        else:
+            c2.close()
+            return t['marketGroupName']
+
 def main():
-    temp_dir = tempfile.mkdtemp()
+    #temp_dir = tempfile.mkdtemp()
     try:
-        db_path = os.path.join(temp_dir, 'eve-db.sqlite')
-        print("Writing sqlite database to %s" % db_path)
-        download_database(db_path)
+        #db_path = os.path.join(temp_dir, 'eve-db.sqlite')
+        #print("Writing sqlite database to %s" % db_path)
+        #download_database(db_path)
+        db_path = "C:\\Users\\Andrew\\AppData\\Local\\Temp\\tmpvpgp20\\eve-db.sqlite"
 
         print("Opening database file")
         conn = sqlite3.connect(db_path)
@@ -124,12 +151,13 @@ def main():
         print("Build type information")
         all_types = list(build_all_types(c))
 
-        types_output_file = 'data/types.json'
+        types_output_file = "C:\\Users\\Andrew\\PycharmProjects\\viktorielucilla-evepraisal\\data\\types.json"
         print("Output types to %s" % types_output_file)
         with open(types_output_file, 'w') as f:
             f.write(json.dumps(all_types, indent=2))
     finally:
-        shutil.rmtree(temp_dir, [])
+        c.close()
+        #shutil.rmtree(temp_dir, [])
 
 
 if __name__ == '__main__':
