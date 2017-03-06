@@ -18,7 +18,7 @@ def memcache_type_key(typeId, options=None):
 
 
 def get_cached_values(eve_types, options=None):
-    "Get Cached values given the eve_types"
+    """Get Cached values given the eve_types"""
     found = {}
     for eve_type in eve_types:
         key = memcache_type_key(eve_type, options=options)
