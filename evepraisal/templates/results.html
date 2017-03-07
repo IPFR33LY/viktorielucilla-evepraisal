@@ -1,5 +1,5 @@
 {% if full_page %}
-    {% extends 'index.html.bak' %}
+    {% extends 'index.html' %}
     {% block title %}{{ _('app title') }} - Result #{{ appraisal.Id }} [{{ appraisal.Kind|format_kind }}]{% endblock %}
 {% else %}
 <script>
