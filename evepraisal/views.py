@@ -119,7 +119,7 @@ def index():
     if not g.user and app.config["REQUIRE_LOGIN"]:
         flash('Login Required.', 'warning')
 
-    return render_template('index.html', appraisal_count=count,
+    return render_template('index.html.bak', appraisal_count=count,
                            require_login=False if g.user else app.config["REQUIRE_LOGIN"])
 
 
