@@ -7,12 +7,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="{{_('app short description')}}" />
-
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+	<script src="http://code.angularjs.org/1.5.3/angular-route.min.js"></script>
+{#    <script src="{{ url_for('static', filename='js/app.js?x49983') }}></script>#}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}" />
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" />
     <link href="https://netdna.bootstrapcdn.com/bootswatch/2.3.2/cyborg/bootstrap.min.css" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='bootstrap-responsive.min.css') }}" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='layout.default.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/layout.default.css') }}" rel="stylesheet" />
 
     {% block extra_style %}
     {% endblock %}
@@ -25,8 +27,8 @@
     <!-- Le fav and touch icons -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='jquery.tablesorter.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='layout.default.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.tablesorter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/layout.default.js') }}"></script>
 
     {% block extra_javascript %}
     {% endblock %}
@@ -42,7 +44,7 @@
             <li><a href="{{ url_for('options') }}">{{_('options button')}}</a></li>
             <li><a href="{{ url_for('logout') }}">{{_('logout button')}}</a></li>
           {% else %}
-            <li><a id="loginlink" href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='EVE_SSO_Login_Buttons_Small_Black.png') }}" alt="EVE : LOG IN with EVE Online" /></a></li>
+            <li><a id="loginlink" href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='img/EVE_SSO_Login_Buttons_Small_Black.png') }}" alt="EVE : LOG IN with EVE Online" /></a></li>
           {% endif %}
         </ul>
         <ul class="nav pull-right">

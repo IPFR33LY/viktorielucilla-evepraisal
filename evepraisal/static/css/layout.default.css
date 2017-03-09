@@ -1,11 +1,11 @@
 body {
-    padding-top: 0px;
+    padding-top: 0;
     padding-left: 2px;
     padding-right: 2px;
 }
 
 .table-condensed th, .table-condensed td {
-    padding: 0px 4px;
+    padding: 0 4px;
 }
 
 .nowrap {

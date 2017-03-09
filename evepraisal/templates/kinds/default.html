@@ -37,13 +37,12 @@
     </td>
     {% if item.prices.buy and item.prices.sell %}
     {% set representative_price = item.prices.sell.price or item.prices.buy.price %}
-    <td class="rightalign" data-sort="-{{ representative_price }}">
-            {{ print_price_cell(item.prices.sell) }}<br/>
-            {{ print_price_cell(item.prices.buy) }}
+    <td class="rightalign" data-sort="-{{ representative_price }}">{{ print_price_cell(item.prices.sell) }}<br/>
+        {{ print_price_cell(item.prices.buy) }}
     </td>
     <td class="rightalign" data-sort="-{{ representative_price * item.quantity|float }}">
-          {{ print_price_cell(item.prices.sell, item.quantity) }}<br/>
-         {{ print_price_cell(item.prices.buy, item.quantity) }}
+        {{ print_price_cell(item.prices.sell, item.quantity) }}<br/>
+        {{ print_price_cell(item.prices.buy, item.quantity) }}
     </td>
     <td class="rightalign" data-sort="-{{ representative_price / (item.volume or 1) }}">
         {% if appraisal.Kind == 'cargo_scan' and item.get('repackaged_volume',0) > 0 %}
@@ -111,4 +110,4 @@
         </tfoot>
     </table>
 </div>
-<script type="text/javascript" src="{{ url_for('static', filename='templates.kinds.default.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/templates.kinds.default.js') }}"></script>
