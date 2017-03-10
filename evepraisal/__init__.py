@@ -18,7 +18,7 @@ app = Flask(__name__)
 # app.run(DEBUG=True)
 # configuration
 CONFIG_EVEPRAISAL_DEBUG = os.environ.get("CONFIG_EVEPRAISAL_DEBUG", "False")
-
+USE_ANGULAR = True
 app.config['DEBUG'] = CONFIG_EVEPRAISAL_DEBUG.lower() == "true"
 app.config['VALID_SOLAR_SYSTEMS'] = {
     '-1': 'Universe',

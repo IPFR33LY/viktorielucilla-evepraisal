@@ -11,7 +11,7 @@ from evepraisal.filters import get_market_name
 from evepraisal.helpers import login_required_if_config
 from evepraisal.models import Appraisals
 from . import cache, g, session
-
+from evepraisal import USE_ANGULAR
 
 def estimate_create(version):
     """ Creates an estimate for the selected version of the estimator.
@@ -43,7 +43,10 @@ def estimate_create(version):
         if return_format == "json":
             return estimate_json(appraisal.Id, version)
 
-    return redirect(url_for(redirect_string, result_id=appraisal.Id), code=302)
+    if USE_ANGULAR:
+        return jsonify()
+    else:
+        return redirect(url_for(redirect_string, result_id=appraisal.Id), code=302)
 
 
 def estimate_history(version, request_format='json'):

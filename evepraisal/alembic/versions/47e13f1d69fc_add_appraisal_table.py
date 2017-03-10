@@ -5,18 +5,17 @@ Revises: None
 Create Date: 2014-01-03 19:56:07.845816
 
 """
+import json
+import evepaste
+import traceback
+from evepraisal import db
+from evepraisal.models import Appraisals
+from evepraisal.parser import parse
 
 # revision identifiers, used by Alembic.
 revision = '47e13f1d69fc'
 down_revision = None
-import json
 
-import evepaste
-import traceback
-
-from evepraisal import db
-from evepraisal.models import Appraisals
-from evepraisal.parser import parse
 
 
 class Scans(db.Model):
